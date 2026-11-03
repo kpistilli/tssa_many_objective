@@ -1,0 +1,33 @@
+# Framework principal (viewer)
+streamlit>=1.46.1
+streamlit-aggrid>=0.3.4.post3
+
+# Manejo de datos
+pandas>=2.3.1
+numpy>=1.21.0
+sqlalchemy>=2.0.36,<2.1   # pandas 3.x exige >= 2.0.36 para leer con conexiones SQLAlchemy
+psycopg2-binary>=2.9.3
+python-dotenv>=0.19.0
+
+# Optimización y algoritmos evolutivos
+pymoo>=0.6.1.5
+scipy>=1.16.0
+
+# Geolocalización y mapas
+folium>=0.20.0
+streamlit-folium>=0.25.0
+geopy>=2.4.1
+
+# Visualización
+plotly>=5.0.0
+matplotlib>=3.7          # NUEVO: figuras de experiments.py
+
+# Exportación a Excel
+xlsxwriter>=3.2.0
+
+# Librerías adicionales
+altair<6,>=4.0
+typing-extensions>=4.6.0
+
+# Desarrollo / pruebas
+pytest>=8.0              # NUEVO: python -m pytest -q tests

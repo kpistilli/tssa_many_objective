@@ -1,0 +1,324 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa del código TSSA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: cabecera breve -> mapa de dependencias (interactivo) + ficha -> recorrido de una corrida -> tabla de referencia */
+:root{
+  --bg:#f5f6f4; --panel:#ffffff; --ink:#1c2321; --muted:#5d6763; --line:#d5dad7; --edge:#8a9490;
+  --datos:#0f6e62; --datos-bg:#e3f1ee; --entrada:#2d4f8f; --entrada-bg:#e6ecf7;
+  --nucleo:#9a5a12; --nucleo-bg:#f6ecdf; --aux-bg:#eef0ee; --pg:#46505a; --pg-bg:#eceff2;
+  --out:#c2410c; --in:#1d6fd6; --db:#46505a;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151a19; --panel:#1d2422; --ink:#e6ebe9; --muted:#9ba6a2; --line:#34403c; --edge:#6f7b77;
+  --datos:#5cc4b3; --datos-bg:#16302c; --entrada:#8fb0ec; --entrada-bg:#1b2539;
+  --nucleo:#e3a55a; --nucleo-bg:#33261a; --aux-bg:#232a28; --pg:#aab4be; --pg-bg:#232a31;
+  --out:#fb8a4f; --in:#6aa9ff; --db:#aab4be; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151a19; --panel:#1d2422; --ink:#e6ebe9; --muted:#9ba6a2; --line:#34403c; --edge:#6f7b77;
+  --datos:#5cc4b3; --datos-bg:#16302c; --entrada:#8fb0ec; --entrada-bg:#1b2539;
+  --nucleo:#e3a55a; --nucleo-bg:#33261a; --aux-bg:#232a28; --pg:#aab4be; --pg-bg:#232a31;
+  --out:#fb8a4f; --in:#6aa9ff; --db:#aab4be; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:28px 56px;display:grid;gap:36px}
+header{display:grid;gap:8px;max-width:72ch}
+h1{font-size:30px;line-height:1.15;margin:0;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:19px;margin:0;font-weight:600;text-wrap:balance}
+p{margin:0}
+.lead{color:var(--muted);font-size:16px}
+code,.mono{font-family:var(--mono);font-size:.9em}
+section{display:grid;gap:14px}
+.intro{color:var(--muted);max-width:75ch}
+.leyenda{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted);align-items:center}
+.leyenda span{display:inline-flex;gap:8px;align-items:center}
+.sw{width:14px;height:14px;border-radius:3px;border:1.5px solid}
+.sw.datos{background:var(--datos-bg);border-color:var(--datos)}
+.sw.entrada{background:var(--entrada-bg);border-color:var(--entrada)}
+.sw.nucleo{background:var(--nucleo-bg);border-color:var(--nucleo)}
+.ln{width:30px;height:0;border-top:2px solid var(--edge)}
+.ln.lazy{border-top-style:dashed}.ln.usa{border-top:2px dotted var(--edge)}
+.ln.ejec{border-top:2px dashed var(--entrada)}.ln.out{border-color:var(--out)}.ln.in{border-color:var(--in)}
+.lienzo{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow-x:auto;padding:8px}
+.lienzo svg{display:block;width:100%;min-width:900px;height:auto}
+figure{margin:0;display:grid;gap:10px}
+figcaption{font-size:13.5px;color:var(--muted);max-width:90ch}
+/* SVG */
+svg .fila{font:600 11px var(--sans);letter-spacing:.08em;fill:var(--muted)}
+svg .fn{font:600 12.5px var(--mono);fill:var(--ink)}
+svg .sub{font:400 11px var(--sans);fill:var(--muted)}
+svg .elab{font:italic 11px var(--sans);fill:var(--muted)}
+svg .n rect{stroke-width:1.5}
+svg .n.datos rect,svg .p.datos rect{fill:var(--datos-bg);stroke:var(--datos)}
+svg .n.entrada rect{fill:var(--entrada-bg);stroke:var(--entrada)}
+svg .n.nucleo rect,svg .p.nucleo rect{fill:var(--nucleo-bg);stroke:var(--nucleo)}
+svg .n.aux rect{fill:var(--aux-bg);stroke:var(--edge);stroke-dasharray:5 3}
+svg .n.pg rect{fill:var(--pg-bg);stroke:var(--pg)}
+svg .p.p0 rect{fill:var(--aux-bg);stroke:var(--edge)}
+svg .pgt{font:600 13px var(--sans);fill:var(--ink)}
+svg .pgh{font:600 10.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;fill:var(--muted)}
+svg .pgl{font:400 10px var(--mono);fill:var(--ink)}
+svg .n{cursor:pointer;transition:opacity .15s}
+svg .n:focus{outline:none}
+svg .n:focus-visible rect,svg .n.sel rect{stroke-width:3}
+svg .e{fill:none;stroke:var(--edge);stroke-width:1.4;transition:opacity .15s}
+svg .e.lazy{stroke-dasharray:6 4}
+svg .e.usa{stroke-dasharray:1.5 4;stroke-width:1.6}
+svg .e.edita{stroke-dasharray:5 3}
+svg .e.db{stroke:var(--db);stroke-width:2.4}
+svg .e.tests{display:none}
+svg .e.ejec{display:none;stroke:var(--entrada);stroke-dasharray:3 3}
+svg.foco .e.ejec.on{display:inline}
+svg .mk{fill:var(--edge)} svg .mk-out{fill:var(--out)} svg .mk-in{fill:var(--in)} svg .mk-db{fill:var(--db)}
+svg.foco .e{opacity:.1} svg.foco .n{opacity:.35}
+svg.foco .e.on{opacity:1;stroke-width:2.4} svg.foco .e.on.out{stroke:var(--out)} svg.foco .e.on.in{stroke:var(--in)}
+svg.foco .e.tests.on{display:inline}
+svg.foco .n.on{opacity:1}
+svg .pt{font:600 13px var(--sans);fill:var(--ink)}
+svg .it{font:600 12.5px var(--sans);fill:var(--ink)}
+svg .pm{font:400 9.8px var(--mono);fill:var(--muted)}
+svg .pmi{font:400 9.5px var(--mono);fill:var(--muted)}
+svg .pd{font:400 11px var(--sans);fill:var(--ink)}
+svg .p rect{stroke-width:1.5}
+svg .bucle{fill:none;stroke:var(--nucleo);stroke-width:1.5;stroke-dasharray:7 4}
+/* ficha */
+.ficha{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:12px}
+.ficha .cab{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline}
+.ficha .nom{font:600 18px var(--mono);word-break:break-all}
+button.chip{background:none;font-family:var(--mono);cursor:pointer;color:var(--ink)}
+.chip{font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.ficha .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 28px}
+.ficha h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 4px;font-weight:600}
+.ficha ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.ficha li{font:12.5px var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px}
+.ficha li button{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.ficha li button:focus-visible{outline:2px solid var(--in);outline-offset:2px}
+.imp-out li{border-color:var(--out)} .imp-in li{border-color:var(--in)}
+.cmd{font:13px var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+.vacia{color:var(--muted);font-size:13px}
+/* tabla */
+.tabla{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+td.f{font-family:var(--mono);font-size:13px;white-space:nowrap}
+td .m{font-family:var(--mono);font-size:12.5px}
+.cap{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;border:1.5px solid}
+.cap.datos{background:var(--datos-bg);border-color:var(--datos)}.cap.entrada{background:var(--entrada-bg);border-color:var(--entrada)}
+.cap.nucleo{background:var(--nucleo-bg);border-color:var(--nucleo)}.cap.aux{background:var(--aux-bg);border-color:var(--edge)}
+@media (prefers-reduced-motion:reduce){svg .n,svg .e{transition:none}}
+</style></head><body>
+<div class="wrap">
+<header>
+  <h1>Mapa del código TSSA</h1>
+  <p class="lead">Cómo se conectan los 11 archivos Python del proyecto <i>Asignación Simultánea de Estudiantes y Docentes</i> y el script de la campaña experimental (versión del 2 de noviembre de 2026). Hay tres capas: lo que ejecutás, el núcleo del modelo y los datos. Sólo dos archivos tocan PostgreSQL.</p>
+</header>
+
+<section aria-labelledby="t1">
+  <h2 id="t1">Quién importa a quién</h2>
+  <p class="intro">Cada flecha va del archivo que importa hacia el importado (<code>A → B</code>: A hace <code>from B import …</code>). Tocá o pasá el mouse sobre un archivo para ver sólo sus conexiones y su ficha abajo.</p>
+  <div class="leyenda" aria-label="Leyenda">
+    <span><i class="sw entrada"></i>punto de entrada</span>
+    <span><i class="sw nucleo"></i>núcleo del modelo</span>
+    <span><i class="sw datos"></i>datos</span>
+    <span><i class="ln"></i>importa</span>
+    <span><i class="ln lazy"></i>import diferido (sólo si hace falta)</span>
+    <span><i class="ln usa"></i>usa el objeto <code>problem</code></span>
+    <span><i class="ln ejec"></i>la campaña lo ejecuta</span>
+    <span><i class="ln out"></i>al seleccionar: lo que importa</span>
+    <span><i class="ln in"></i>quién lo importa</span>
+  </div>
+  <figure>
+    <div class="lienzo"><svg id="mapa" viewBox="0 0 1260 540" role="img" aria-label="Mapa de dependencias entre los archivos Python del proyecto TSSA: los puntos de entrada importan el núcleo del modelo y la capa de datos; pareto.py y database.py son los únicos que tocan PostgreSQL.">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="ah-out" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-out"/></marker><marker id="ah-in" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-in"/></marker><marker id="ah-db" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-db"/></marker></defs>
+<text x="40.0" y="40.0" class="fila" text-anchor="start">DATOS · de dónde salen los datos</text>
+<text x="40.0" y="202.0" class="fila" text-anchor="start">PUNTOS DE ENTRADA · lo que ejecutás</text>
+<text x="40.0" y="364.0" class="fila" text-anchor="start">NÚCLEO DEL MODELO · lo que hace la optimización</text>
+<g id="aristas">
+<path class="e imp" data-s="app" data-t="instancia" d="M103.3,214.0 C103.3,165.0 188.0,165.0 188.0,116.0" marker-end="url(#ah)"/>
+<path class="e lazy" data-s="app" data-t="database" d="M166.7,214.0 C166.7,165.0 753.3,165.0 753.3,116.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="experiments" data-t="instancia" d="M355.0,214.0 C355.0,165.0 226.0,165.0 226.0,116.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="viewer" data-t="database" d="M654.7,214.0 C654.7,165.0 816.7,165.0 816.7,116.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="viewer" data-t="instancia" d="M567.3,214.0 C567.3,165.0 264.0,165.0 264.0,116.0" marker-end="url(#ah)"/>
+<path class="e tests" data-s="tests" data-t="instancia" d="M1046.0,214.0 C1046.0,165.0 302.0,165.0 302.0,116.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="app" data-t="opt" d="M154.0,272.0 C154.0,321.0 729.2,321.0 729.2,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="app" data-t="problem" d="M78.0,272.0 C78.0,321.0 80.0,321.0 80.0,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="app" data-t="metrics" d="M116.0,272.0 C116.0,321.0 317.5,321.0 317.5,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="app" data-t="pareto" d="M192.0,272.0 C192.0,321.0 977.2,321.0 977.2,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="experiments" data-t="opt" d="M386.7,272.0 C386.7,321.0 774.4,321.0 774.4,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="experiments" data-t="problem" d="M291.7,272.0 C291.7,321.0 120.0,321.0 120.0,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="experiments" data-t="metrics" d="M323.3,272.0 C323.3,321.0 355.0,321.0 355.0,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="experiments" data-t="operators" d="M355.0,272.0 C355.0,321.0 524.7,321.0 524.7,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="experiments" data-t="pareto" d="M418.3,272.0 C418.3,321.0 1004.4,321.0 1004.4,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="viewer" data-t="problem" d="M545.5,272.0 C545.5,321.0 160.0,321.0 160.0,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="viewer" data-t="opt" d="M611.0,272.0 C611.0,321.0 819.6,321.0 819.6,370.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="viewer" data-t="pareto" d="M676.5,272.0 C676.5,321.0 1031.6,321.0 1031.6,370.0" marker-end="url(#ah)"/>
+<path class="e tests" data-s="tests" data-t="opt" d="M1064.7,272.0 C1064.7,321.0 864.8,321.0 864.8,370.0" marker-end="url(#ah)"/>
+<path class="e tests" data-s="tests" data-t="problem" d="M1008.7,272.0 C1008.7,321.0 200.0,321.0 200.0,370.0" marker-end="url(#ah)"/>
+<path class="e tests" data-s="tests" data-t="operators" d="M1046.0,272.0 C1046.0,321.0 579.3,321.0 579.3,370.0" marker-end="url(#ah)"/>
+<path class="e tests" data-s="tests" data-t="metrics" d="M1027.3,272.0 C1027.3,321.0 392.5,321.0 392.5,370.0" marker-end="url(#ah)"/>
+<path class="e tests" data-s="tests" data-t="pareto" d="M1083.3,272.0 C1083.3,321.0 1058.8,321.0 1058.8,370.0" marker-end="url(#ah)"/>
+<path class="e lazy" data-s="instancia" data-t="database" d="M340,81.0 L684,81.0" marker-end="url(#ah)"/>
+<path class="e ejec" data-s="campania" data-t="experiments" d="M870,214 C870,184 400,184 400,214" marker-end="url(#ah)"/>
+<path class="e ejec" data-s="campania" data-t="app" d="M850,214 C850,172 190,172 190,214" marker-end="url(#ah)"/>
+<path class="e ejec" data-s="campania" data-t="tests" d="M970,243.0 L986,243.0" marker-end="url(#ah)"/>
+<path class="e ejec" data-s="campania" data-t="database" d="M915,214 C915,165 845,165 845,116" marker-end="url(#ah)"/>
+<path class="e tests" data-s="tests" data-t="experiments" d="M1020,214 C1020,194 430,194 430,214" marker-end="url(#ah)"/>
+<path class="e imp" data-s="opt" data-t="operators" d="M684,405.0 L640,405.0" marker-end="url(#ah)"/>
+<path class="e imp" data-s="opt" data-t="pareto" d="M910,405.0 L944,405.0" marker-end="url(#ah)"/>
+<path class="e db" data-s="database" data-t="pg" d="M880,81.0 L1110,81.0" marker-end="url(#ah-db)"/>
+<path class="e db" data-s="pareto" data-t="pg" d="M1086,405.0 L1110,405.0" marker-end="url(#ah-db)"/>
+<path class="e usa" data-s="metrics" data-t="problem" d="M355.0,434 C355.0,460 205,460 205,440" marker-end="url(#ah)"/>
+<path class="e usa" data-s="operators" data-t="problem" d="M552.0,434 C552.0,484 150,484 150,440" marker-end="url(#ah)"/>
+<path class="e usa" data-s="pareto" data-t="problem" d="M1018.0,434 C1018.0,512 95,512 95,440" marker-end="url(#ah)"/>
+</g>
+<text x="470.0" y="530.0" class="elab" text-anchor="start">usan el objeto problem que reciben (no importan el módulo)</text>
+<text x="525.0" y="73.0" class="elab" text-anchor="middle">import diferido</text>
+<g class="n datos" data-id="instancia" tabindex="0" role="button" aria-label="instancia.py: arma la instancia (BD, CSV, .sql)"><rect x="150" y="52" width="190" height="58" rx="7"/><text x="245.0" y="77.0" class="fn" text-anchor="middle">instancia.py</text><text x="245.0" y="95.0" class="sub" text-anchor="middle">arma la instancia (BD, CSV, .sql)</text></g>
+<g class="n datos" data-id="database" tabindex="0" role="button" aria-label="database.py: conexión y lectura PostgreSQL"><rect x="690" y="52" width="190" height="58" rx="7"/><text x="785.0" y="77.0" class="fn" text-anchor="middle">database.py</text><text x="785.0" y="95.0" class="sub" text-anchor="middle">conexión y lectura PostgreSQL</text></g>
+<g class="n entrada" data-id="app" tabindex="0" role="button" aria-label="integrated_app.py: terminal · una corrida"><rect x="40" y="214" width="190" height="58" rx="7"/><text x="135.0" y="239.0" class="fn" text-anchor="middle">integrated_app.py</text><text x="135.0" y="257.0" class="sub" text-anchor="middle">terminal · una corrida</text></g>
+<g class="n entrada" data-id="experiments" tabindex="0" role="button" aria-label="experiments.py: terminal · experimentos"><rect x="260" y="214" width="190" height="58" rx="7"/><text x="355.0" y="239.0" class="fn" text-anchor="middle">experiments.py</text><text x="355.0" y="257.0" class="sub" text-anchor="middle">terminal · experimentos</text></g>
+<g class="n entrada" data-id="viewer" tabindex="0" role="button" aria-label="integrated_viewer_optimizado.py: interfaz web (Streamlit)"><rect x="480" y="214" width="262" height="58" rx="7"/><text x="611.0" y="239.0" class="fn" text-anchor="middle">integrated_viewer_optimizado.py</text><text x="611.0" y="257.0" class="sub" text-anchor="middle">interfaz web (Streamlit)</text></g>
+<g class="n entrada" data-id="campania" tabindex="0" role="button" aria-label="campania_tesis.sh: campaña experimental, fases 0 a 6"><rect x="832" y="214" width="138" height="58" rx="7"/><text x="901.0" y="239.0" class="fn" text-anchor="middle">campania_tesis.sh</text><text x="901.0" y="257.0" class="sub" text-anchor="middle">campaña · fases 0–6</text></g>
+<g class="n aux" data-id="tests" tabindex="0" role="button" aria-label="test_tssa.py: pruebas · tests/"><rect x="990" y="214" width="112" height="58" rx="7"/><text x="1046.0" y="239.0" class="fn" text-anchor="middle">test_tssa.py</text><text x="1046.0" y="257.0" class="sub" text-anchor="middle">26 pruebas</text></g>
+<g class="n nucleo" data-id="problem" tabindex="0" role="button" aria-label="integrated_problem.py: modelo: x, f1–f6, g1–g5"><rect x="40" y="376" width="200" height="58" rx="7"/><text x="140.0" y="401.0" class="fn" text-anchor="middle">integrated_problem.py</text><text x="140.0" y="419.0" class="sub" text-anchor="middle">modelo: x, f1–f6, g1–g5 (franjas)</text></g>
+<g class="n nucleo" data-id="metrics" tabindex="0" role="button" aria-label="metrics.py: HV, IGD+, estadística"><rect x="280" y="376" width="150" height="58" rx="7"/><text x="355.0" y="401.0" class="fn" text-anchor="middle">metrics.py</text><text x="355.0" y="419.0" class="sub" text-anchor="middle">HV, IGD+, estadística</text></g>
+<g class="n nucleo" data-id="operators" tabindex="0" role="button" aria-label="operators.py: semillas, mutación y reparación"><rect x="470" y="376" width="164" height="58" rx="7"/><text x="552.0" y="401.0" class="fn" text-anchor="middle">operators.py</text><text x="552.0" y="419.0" class="sub" text-anchor="middle">semillas, mutación, repar.</text></g>
+<g class="n nucleo" data-id="opt" tabindex="0" role="button" aria-label="integrated_optimization.py: arma y ejecuta el algoritmo"><rect x="684" y="376" width="226" height="58" rx="7"/><text x="797.0" y="401.0" class="fn" text-anchor="middle">integrated_optimization.py</text><text x="797.0" y="419.0" class="sub" text-anchor="middle">arma y ejecuta el algoritmo</text></g>
+<g class="n nucleo" data-id="pareto" tabindex="0" role="button" aria-label="pareto.py: frente, decisión y guardado en la BD"><rect x="950" y="376" width="136" height="58" rx="7"/><text x="1018.0" y="401.0" class="fn" text-anchor="middle">pareto.py</text><text x="1018.0" y="419.0" class="sub" text-anchor="middle">frente, decisión, BD</text></g>
+<g class="n pg" data-id="pg" tabindex="0" role="button" aria-label="Base de datos PostgreSQL"><rect x="1116" y="52" width="134" height="382" rx="7"/><text x="1126.0" y="74.0" class="pgt" text-anchor="start">PostgreSQL</text><text x="1126.0" y="96.0" class="pgh" text-anchor="start">lee</text><text x="1126.0" y="112.0" class="pgl" text-anchor="start">estudiantes</text><text x="1126.0" y="127.0" class="pgl" text-anchor="start">docentes</text><text x="1126.0" y="142.0" class="pgl" text-anchor="start">clases</text><text x="1126.0" y="157.0" class="pgl" text-anchor="start">establecimientos</text><text x="1126.0" y="172.0" class="pgl" text-anchor="start">instituciones</text><text x="1126.0" y="187.0" class="pgl" text-anchor="start">asignacion_mec</text><text x="1126.0" y="306.0" class="pgh" text-anchor="start">escribe</text><text x="1126.0" y="322.0" class="pgl" text-anchor="start">opt_run</text><text x="1126.0" y="337.0" class="pgl" text-anchor="start">pareto_solucion</text><text x="1126.0" y="352.0" class="pgl" text-anchor="start">asignacion_pareto</text><text x="1126.0" y="367.0" class="pgl" text-anchor="start">asignacion_mec_opt</text></g>
+</svg></div>
+    <figcaption>Los tres programas Python importan el núcleo (abajo) y la capa de datos (arriba); <code>campania_tesis.sh</code> no importa nada: ejecuta las pruebas, <code>experiments.py</code> e <code>integrated_app.py</code> por fases (sus flechas y las de las pruebas aparecen al seleccionarlos). <code>integrated_problem.py</code> no depende de ningún otro archivo del proyecto: los demás reciben el objeto <code>problem</code> y usan sus matrices. PostgreSQL se lee por <code>database.py</code> y se escribe por <code>pareto.py</code>.</figcaption>
+  </figure>
+  <div class="ficha" id="ficha" aria-live="polite"></div>
+</section>
+
+<section aria-labelledby="t2">
+  <h2 id="t2">Qué pasa durante una corrida</h2>
+  <p class="intro">El mismo código visto en el orden en que se ejecuta, por ejemplo con <code>python integrated_app.py</code>. El paso 4 es el ciclo que pymoo repite en cada generación; ahí se reparte casi todo el tiempo de cómputo.</p>
+  <figure>
+    <div class="lienzo"><svg viewBox="0 0 1260 340" role="img" aria-label="Recorrido de una corrida: cargar datos, armar el problema, preparar el algoritmo, repetir el ciclo de cada generación, obtener el Conjunto Pareto y decidir, y guardar o exportar resultados.">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="ah-out" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-out"/></marker><marker id="ah-in" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-in"/></marker><marker id="ah-db" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-db"/></marker></defs>
+<g class="p datos"><rect x="20" y="110" width="172" height="112" rx="7"/><text x="32.0" y="132.0" class="pt" text-anchor="start">1 · Cargar datos</text><text x="32.0" y="150.0" class="pm" text-anchor="start">instancia.py · database.py</text><text x="32.0" y="170.0" class="pd" text-anchor="start">estudiantes, docentes,</text><text x="32.0" y="185.0" class="pd" text-anchor="start">clases y asignación MEC</text></g>
+<g class="p nucleo"><rect x="208" y="110" width="172" height="112" rx="7"/><text x="220.0" y="132.0" class="pt" text-anchor="start">2 · Armar problema</text><text x="220.0" y="150.0" class="pm" text-anchor="start">integrated_problem.py</text><text x="220.0" y="170.0" class="pd" text-anchor="start">distancias U y V,</text><text x="220.0" y="185.0" class="pd" text-anchor="start">candidatas por grado</text></g>
+<g class="p nucleo"><rect x="396" y="110" width="172" height="112" rx="7"/><text x="408.0" y="132.0" class="pt" text-anchor="start">3 · Algoritmo</text><text x="408.0" y="150.0" class="pm" text-anchor="start">integrated_optimization.py</text><text x="408.0" y="170.0" class="pd" text-anchor="start">C-TAEA u otro; semillas:</text><text x="408.0" y="185.0" class="pd" text-anchor="start">greedy (+ MEC si hay f6);</text><text x="408.0" y="200.0" class="pd" text-anchor="start">np.random.seed(semilla)</text></g>
+<path class="e imp" d="M192,166 L206,166" marker-end="url(#ah)"/>
+<path class="e imp" d="M380,166 L394,166" marker-end="url(#ah)"/>
+<rect class="bucle" x="596" y="24" width="436" height="296" rx="12"/>
+<text x="612.0" y="50.0" class="pt" text-anchor="start">4 · Cada generación (se repite n_gen veces)</text>
+<path class="e imp" d="M568,166 L590,166" marker-end="url(#ah)"/>
+<g class="p p0"><rect x="612" y="82" width="124" height="64" rx="6"/><text x="674.0" y="109.0" class="it" text-anchor="middle">Cruce</text><text x="674.0" y="128.0" class="pmi" text-anchor="middle">pymoo</text></g>
+<g class="p nucleo"><rect x="752" y="82" width="124" height="64" rx="6"/><text x="814.0" y="109.0" class="it" text-anchor="middle">Mutación</text><text x="814.0" y="128.0" class="pmi" text-anchor="middle">operators.py</text></g>
+<g class="p nucleo"><rect x="892" y="82" width="124" height="64" rx="6"/><text x="954.0" y="109.0" class="it" text-anchor="middle">Reparación R1–R5</text><text x="954.0" y="128.0" class="pmi" text-anchor="middle">operators.py</text></g>
+<g class="p nucleo"><rect x="892" y="236" width="124" height="64" rx="6"/><text x="954.0" y="263.0" class="it" text-anchor="middle">Evaluación f y g</text><text x="954.0" y="282.0" class="pmi" text-anchor="middle">integrated_problem.py</text></g>
+<g class="p p0"><rect x="752" y="236" width="124" height="64" rx="6"/><text x="814.0" y="263.0" class="it" text-anchor="middle">Supervivencia</text><text x="814.0" y="282.0" class="pmi" text-anchor="middle">pymoo</text></g>
+<g class="p nucleo"><rect x="612" y="236" width="124" height="64" rx="6"/><text x="674.0" y="263.0" class="it" text-anchor="middle">Archivo Pareto</text><text x="674.0" y="282.0" class="pmi" text-anchor="middle">pareto.py</text></g>
+<path class="e imp" d="M736,114.0 L746,114.0" marker-end="url(#ah)"/>
+<path class="e imp" d="M876,114.0 L886,114.0" marker-end="url(#ah)"/>
+<path class="e imp" d="M892,268.0 L882,268.0" marker-end="url(#ah)"/>
+<path class="e imp" d="M752,268.0 L742,268.0" marker-end="url(#ah)"/>
+<path class="e imp" d="M954.0,146 L954.0,230" marker-end="url(#ah)"/>
+<path class="e lazy" d="M674.0,236 L674.0,152" marker-end="url(#ah)"/>
+<text x="682.0" y="195.0" class="elab" text-anchor="start">siguiente generación</text>
+<text x="946.0" y="195.0" class="elab" text-anchor="end">hijos válidos</text>
+<path class="e imp" d="M1032,169 L1052,169" marker-end="url(#ah)"/>
+<g class="p nucleo"><rect x="1058" y="110" width="182" height="118" rx="7"/><text x="1070.0" y="132.0" class="pt" text-anchor="start">5 · Frente y decisión</text><text x="1070.0" y="150.0" class="pm" text-anchor="start">pareto.py</text><text x="1070.0" y="170.0" class="pd" text-anchor="start">Conjunto Pareto completo;</text><text x="1070.0" y="185.0" class="pd" text-anchor="start">elegir una solución:</text><text x="1070.0" y="200.0" class="pd" text-anchor="start">domina_mec, compromiso…</text></g>
+<path class="e imp" d="M1149,228 L1149,240" marker-end="url(#ah)"/>
+<g class="p nucleo"><rect x="1058" y="246" width="182" height="88" rx="7"/><text x="1070.0" y="268.0" class="pt" text-anchor="start">6 · Guardar</text><text x="1070.0" y="286.0" class="pm" text-anchor="start">pareto.py · metrics.py</text><text x="1070.0" y="306.0" class="pd" text-anchor="start">PostgreSQL, CSV/NPZ;</text><text x="1070.0" y="321.0" class="pd" text-anchor="start">HV e IGD+ (experiments)</text></g>
+</svg></div>
+    <figcaption>Pasos 1 a 3: se preparan una sola vez; la semilla fija también <code>np.random</code>, que usan los operadores propios, así que cada corrida es reproducible. Paso 4: en cada generación los hijos se cruzan, mutan, se reparan para cumplir R1–R5, se evalúan y sobreviven los mejores; las soluciones factibles se acumulan en el archivo Pareto. Pasos 5 y 6: al terminar se arma el Conjunto Pareto, se elige una solución y se guarda. Con <code>domina_mec</code> se elige la de compromiso entre las que mejoran a la asignación del MEC en todos los objetivos.</figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="t3">
+  <h2 id="t3">Referencia rápida</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Archivo</th><th>Qué hace</th><th>Importa del proyecto</th><th>Lo importan</th></tr></thead>
+    <tbody id="filas"></tbody>
+  </table></div>
+  <p class="intro" style="font-size:13.5px"><code>tests/legacy/original_integrated_problem.py</code> es la copia congelada de la v1.3 que sólo usa la prueba de regresión. <code>campania_tesis.sh</code> (bash) orquesta la campaña: 0 pruebas, 1 datos, 2 piloto, 3 experimento principal, 4 estabilidad, 5 ablaciones, 6 recomendación en la BD. Las dependencias externas principales son pymoo (algoritmos), pandas/numpy, SQLAlchemy y psycopg2 (base de datos) y Streamlit/Folium (viewer).</p>
+</section>
+</div>
+<script>
+const INFO = {"app": {"capa": "Punto de entrada", "nombre": "integrated_app.py", "que": "Ejecuta UNA optimización desde la terminal: carga los datos, arma el problema, corre el algoritmo, muestra el Conjunto Pareto y lo compara con la asignación actual del MEC. Guarda en la BD o exporta a CSV/NPZ. Es la fase 6 de la campaña (C-TAEA con domina_mec).", "claves": ["main()", "parse_args()"], "cmd": "python integrated_app.py --fuente db --algoritmo ctaea --metodo-decision domina_mec"}, "experiments": {"capa": "Punto de entrada", "nombre": "experiments.py", "que": "Protocolo experimental de la tesis: 30 corridas por algoritmo con semillas reproducibles, variantes algoritmo@k (por ejemplo ctaea@3), greedy como línea de base (excluido si es infactible), semillas de estabilidad cuando f6 es objetivo, indicadores (HV, IGD+, GD+), estadística y figuras.", "claves": ["correr_escenario()", "ejecutar_corrida()", "construir_problema()", "RegistroConvergencia", "figuras()"], "cmd": "python experiments.py --fuente csv --csv-dir datos_asu --runs 30 --gen 500"}, "viewer": {"capa": "Punto de entrada", "nombre": "integrated_viewer_optimizado.py", "que": "Interfaz web con tres pestañas: asignación actual (objetivos del MEC), optimización (Conjunto Pareto, elección del método de decisión, incluido domina_mec, y guardado) y comparación antes/después con los mismos objetivos que integrated_app.py, más mapas y exportación a Excel.", "claves": ["preparar_modelo()", "tabla_objetivos()", "cargar_asignaciones_full()", "dibujar_lineas()"], "cmd": "streamlit run integrated_viewer_optimizado.py"}, "tests": {"capa": "Pruebas", "nombre": "tests/test_tssa.py", "que": "26 pruebas: ejemplo didáctico del preprint, regresión contra la v1.3 (tests/legacy), reparación, los 6 algoritmos, archivo Pareto, decisión, f4/f6, franjas Mañana-Tarde, mapeo de secciones, greedy infactible, reproducibilidad por semilla, semillas de estabilidad y domina_mec. Sus flechas se muestran sólo al seleccionarlo.", "claves": ["test_regresion_vs_codigo_original", "test_franjas_manana_tarde", "test_reproducibilidad_semilla", "test_decision_domina_mec"], "cmd": "python -m pytest -q tests"}, "opt": {"capa": "Núcleo · orquestación", "nombre": "integrated_optimization.py", "que": "Arma el algoritmo evolutivo (NSGA-II, NSGA-III, U-NSGA-III, C-TAEA, RVEA, SPEA2) con los operadores del TSSA, fija la semilla de la corrida (pymoo y np.random), inyecta las semillas de estabilidad si f6 es objetivo, lo ejecuta con pymoo, reúne el Conjunto Pareto y abre la conexión para guardarlo (DatabaseManager).", "claves": ["run_integrated_optimization()", "construir_algoritmo()", "construir_operadores()", "select_best_individual()", "DatabaseManager"], "cmd": null}, "problem": {"capa": "Núcleo · modelo", "nombre": "integrated_problem.py", "que": "Define el problema: el vector x = [XA | XD], los objetivos f1–f6 y las restricciones g1–g5. R4 (g4) se evalúa sobre franjas horarias: una clase Mañana-Tarde ocupa el día completo del docente. Precalcula las distancias U y V y las clases candidatas de cada alumno. No importa ningún otro archivo del proyecto.", "claves": ["IntegratedProblem", "evaluar()", "franjas_de_turno()", "a_reportable()", "OBJETIVOS"], "cmd": null}, "operators": {"capa": "Núcleo · operadores", "nombre": "operators.py", "que": "Operadores propios del problema: población inicial por grado, mutación categórica, reparación R1–R5 (con franjas horarias), la heurística greedy y las semillas de estabilidad (MEC y mezclas MEC/greedy) para f6. Recibe el objeto problem y usa sus matrices y candidatas.", "claves": ["TSSASampling", "TSSAMutation", "TSSARepair", "reparar()", "solucion_greedy()", "semillas_estabilidad()"], "cmd": null}, "pareto": {"capa": "Núcleo · resultados", "nombre": "pareto.py", "que": "Todo lo que pasa con el Conjunto Pareto: archivo externo por generación (tope de 2.000 soluciones), extracción del frente, decisión a posteriori (compromiso, rodilla, pseudo-pesos, domina_mec…), traducción a filas de asignación y guardado en CSV/NPZ y PostgreSQL (COPY).", "claves": ["ParetoArchive", "extraer_pareto_set()", "seleccionar_solucion()", "ref_mec()", "guardar_pareto_db()", "exportar_pareto()"], "cmd": null}, "metrics": {"capa": "Núcleo · evaluación", "nombre": "metrics.py", "que": "Mide la calidad de los frentes (HV, IGD+, GD+, spacing), compara contra el MEC y el greedy (dominancia, % de mejora) y hace la estadística (Kruskal–Wallis, Mann–Whitney con Holm, A12).", "claves": ["Indicadores", "Normalizador", "estadistica_completa()", "tabla_mejora()", "domina()"], "cmd": null}, "instancia": {"capa": "Datos", "nombre": "instancia.py", "que": "Arma la instancia (estudiantes, docentes, clases y asignación MEC) desde la BD, un snapshot CSV (datos_asu/), el script asignacion_mec.sql o una instancia sintética. Convierte la asignación del MEC en un vector x, asignando cada sección a una clase según su orden dentro de (establecimiento, grado, turno).", "claves": ["cargar_desde_db()", "cargar_desde_csv()", "cargar_desde_sql()", "x_desde_asignacion()", "subinstancia_por_grado()"], "cmd": null}, "database": {"capa": "Datos", "nombre": "database.py", "que": "Única configuración de conexión (DB_CONFIG, desde .env) y el engine de SQLAlchemy. Lee las tablas base de PostgreSQL. La campaña usa test_conexion() en la fase 1.", "claves": ["DB_CONFIG", "engine", "cargar_datos_desde_db()", "test_conexion()"], "cmd": "python -c \"from database import test_conexion; test_conexion()\""}, "pg": {"capa": "Base de datos", "nombre": "PostgreSQL", "que": "Se lee a través de database.py (tablas base y la asignación del MEC) y se escribe a través de pareto.py (Conjunto Pareto y la solución elegida). El viewer vuelve a leer asignacion_mec_opt para mostrar el “después”.", "claves": ["opt_run", "pareto_solucion", "asignacion_pareto", "asignacion_mec_opt"], "cmd": null}, "campania": {"capa": "Punto de entrada · campaña", "nombre": "campania_tesis.sh", "que": "Script bash que orquesta la campaña experimental completa y reanudable: 0 pruebas, 1 conexión y snapshot de la BD, 2 piloto de convergencia, 3 experimento principal (con el diseño 2×2), 4 estabilidad (complementaria), 5 ablaciones y 6 recomendación con C-TAEA en la BD. No importa módulos: ejecuta los programas Python.", "claves": ["RUNS=30, POP=100, GEN=500", "MAX_ARCHIVO=2000", "exp() (salta lo ya terminado)"], "cmd": "bash campania_tesis.sh 3"}};
+const svg = document.getElementById("mapa");
+const aristas = [...svg.querySelectorAll(".e")];
+const nodos = [...svg.querySelectorAll(".n")];
+const nombre = id => INFO[id] ? INFO[id].nombre : id;
+// relaciones de import (sin contar "usa" ni "edita" ni las de la BD)
+const esImport = e => e.classList.contains("imp") || e.classList.contains("lazy") || e.classList.contains("tests");
+const esEjec = e => e.classList.contains("ejec");
+const importa = id => aristas.filter(e => (id === "campania" ? esEjec(e) : esImport(e)) && e.dataset.s === id).map(e => e.dataset.t);
+const ejecutadoPor = id => aristas.filter(e => esEjec(e) && e.dataset.t === id).length > 0;
+const importan = id => aristas.filter(e => esImport(e) && e.dataset.t === id).map(e => e.dataset.s);
+const unicos = a => [...new Set(a)];
+let fijo = null;
+function mostrar(id){
+  svg.classList.toggle("foco", !!id);
+  nodos.forEach(n => n.classList.remove("on","sel"));
+  aristas.forEach(e => {
+    e.classList.remove("on","out","in");
+    const mk = e.classList.contains("db") ? "ah-db" : "ah";
+    e.setAttribute("marker-end", `url(#${mk})`);
+    if (!id) return;
+    if (e.dataset.s === id || e.dataset.t === id){
+      const dir = e.dataset.s === id ? "out" : "in";
+      e.classList.add("on", dir);
+      e.setAttribute("marker-end", `url(#ah-${dir})`);
+      svg.querySelector(`.n[data-id="${e.dataset.s}"]`)?.classList.add("on");
+      svg.querySelector(`.n[data-id="${e.dataset.t}"]`)?.classList.add("on");
+    }
+  });
+  if (id){ const n = svg.querySelector(`.n[data-id="${id}"]`); n.classList.add("on","sel"); }
+  ficha(id);
+}
+function lista(ids, cls){
+  if (!ids.length) return `<p class="vacia">ninguno</p>`;
+  return `<ul class="${cls}">` + ids.map(i => `<li><button type="button" data-ir="${i}">${nombre(i)}</button></li>`).join("") + `</ul>`;
+}
+function ficha(id){
+  const f = document.getElementById("ficha");
+  if (!id){
+    f.innerHTML = `<div class="cab"><span class="nom">Elegí un archivo</span></div>
+      <p class="vacia">Tocá cualquier caja del mapa (o usá Tab y Enter) para ver qué hace, qué importa y quién lo importa. Empezá por <button type="button" class="chip" data-ir="opt">integrated_optimization.py</button>, el que conecta todo.</p>`;
+  } else {
+    const d = INFO[id];
+    let usa = [];
+    if (["operators","pareto","metrics"].includes(id)) usa.push("problem");
+    const extra = id === "pareto" ? " · escribe en PostgreSQL" : id === "database" ? " · lee PostgreSQL" : "";
+    f.innerHTML = `<div class="cab"><span class="nom">${d.nombre}</span><span class="chip">${d.capa}${extra}</span></div>
+      <p>${d.que}</p>
+      <div class="cols">
+        <div><h3>${id === "campania" ? "Ejecuta" : "Importa"}</h3>${lista(unicos(importa(id).concat(usa.length ? [] : [])), "imp-out")}${usa.length ? `<p class="vacia" style="margin-top:6px">y usa el objeto <code>problem</code> que recibe</p>` : ""}</div>
+        <div><h3>Lo importan</h3>${lista(unicos(importan(id)), "imp-in")}${ejecutadoPor(id) ? `<p class="vacia" style="margin-top:6px">y lo ejecuta <code>campania_tesis.sh</code></p>` : ""}</div>
+        <div><h3>Piezas principales</h3><ul>${d.claves.map(c => `<li>${c}</li>`).join("")}</ul></div>
+      </div>
+      ${d.cmd ? `<div><h3>Se ejecuta con</h3><div class="cmd">${d.cmd}</div></div>` : ""}`;
+  }
+  f.querySelectorAll("[data-ir]").forEach(b => b.addEventListener("click", () => { fijo = b.dataset.ir; mostrar(fijo); }));
+}
+nodos.forEach(n => {
+  const id = n.dataset.id;
+  n.addEventListener("mouseenter", () => mostrar(id));
+  n.addEventListener("mouseleave", () => mostrar(fijo));
+  n.addEventListener("click", () => { fijo = fijo === id ? null : id; mostrar(fijo); });
+  n.addEventListener("focus", () => mostrar(id));
+  n.addEventListener("blur", () => mostrar(fijo));
+  n.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); fijo = fijo === id ? null : id; mostrar(fijo); }});
+});
+// tabla de referencia
+const orden = ["campania","app","experiments","viewer","opt","problem","operators","pareto","metrics","instancia","database","tests"];
+const capaDe = id => ({campania:"entrada",app:"entrada",experiments:"entrada",viewer:"entrada",tests:"aux",instancia:"datos",database:"datos"})[id] || "nucleo";
+document.getElementById("filas").innerHTML = orden.map(id => {
+  const d = INFO[id]; const a = id === "campania" ? [] : unicos(importa(id)), b = unicos(importan(id));
+  const fmt = l => l.length ? l.map(i => `<span class="m">${nombre(i)}</span>`).join("<br>") : "—";
+  return `<tr><td class="f"><i class="cap ${capaDe(id)}"></i>${d.nombre}</td><td>${d.que}</td><td>${fmt(a)}</td><td>${fmt(b)}</td></tr>`;
+}).join("");
+mostrar(null);
+</script>
+</body></html>
