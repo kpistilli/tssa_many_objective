@@ -1,0 +1,27 @@
+[2026-10-29 10:56:13] Campaña iniciada. Fases: 0 1 2 3  (RUNS=30 POP=100 GEN=500 MAX_ARCHIVO=2000)
+[2026-10-29 10:56:13] Fase 0: pruebas unitarias
+........................                                                 [100%]
+=============================== warnings summary ===============================
+tests/test_tssa.py::test_algoritmos[rvea]
+  /Users/klauspistilli/tesiskp/tesisIA/tssa_many_objective/venv/lib/python3.14/site-packages/pymoo/algorithms/moo/rvea.py:125: RuntimeWarning: invalid value encountered in divide
+    return ref_dirs / np.linalg.norm(ref_dirs, axis=1)[:, None]
+
+tests/test_tssa.py::test_algoritmos[spea2]
+  /Users/klauspistilli/tesiskp/tesisIA/tssa_many_objective/venv/lib/python3.14/site-packages/pymoo/algorithms/moo/spea2.py:74: RuntimeWarning: invalid value encountered in divide
+    _F = (F - ideal) / (nadir - ideal)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+24 passed, 2 warnings in 4.40s
+[2026-10-29 10:56:18] Fase 1: verificando conexión a PostgreSQL
+[2026-10-29 10:56:19] Fase 1: exportando snapshot de la BD a datos_asu/
+2026-10-29 10:56:20,119 INFO Cargando datos desde la base de datos...
+2026-10-29 10:56:20,205 INFO Datos cargados correctamente: 7540 estudiantes, 281 docentes, 318 clases, 69 establecimientos
+2026-10-29 10:56:20,272 INFO --runs 0: solo carga/exportación de datos; no se ejecutan algoritmos.
+[2026-10-29 10:56:20] Fase 2: piloto de convergencia (5 corridas, 800 generaciones)
+[2026-10-29 10:56:20] INICIO piloto_convergencia
+[2026-10-29 11:17:13] FIN    piloto_convergencia (20 min)
+[2026-10-29 11:17:13] Revisar resultados/tesis/piloto_convergencia/completo/convergencia*.png y ajustar GEN
+[2026-10-29 11:17:13] Fase 3: experimento principal
+[2026-10-29 11:17:13] INICIO principal
+[2026-10-29 18:45:20] FIN    principal (448 min)
+[2026-10-29 18:45:20] Campaña terminada sin fallos. Resultados en resultados/tesis/

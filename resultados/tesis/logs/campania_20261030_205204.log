@@ -1,0 +1,19 @@
+[2026-10-30 20:52:05] Campaña iniciada. Fases: 5  (RUNS=30 POP=100 GEN=500 MAX_ARCHIVO=2000)
+[2026-10-30 20:52:05] Fase 5: ablaciones
+[2026-10-30 20:52:05] INICIO abl_operadores_sbx
+[2026-10-30 21:25:04] FIN    abl_operadores_sbx (32 min)
+[2026-10-30 21:25:04] INICIO abl_f4_max
+[2026-10-30 21:55:14] FIN    abl_f4_max (30 min)
+[2026-10-30 21:55:14] INICIO abl_sin_reparacion
+[2026-10-30 22:03:15] FIN    abl_sin_reparacion (8 min)
+[2026-10-30 22:03:15] INICIO abl_sin_semilla
+[2026-10-30 22:25:35] FIN    abl_sin_semilla (22 min)
+[2026-10-30 22:25:35] INICIO abl_capmin25
+[2026-10-30 22:54:28] FIN    abl_capmin25 (28 min)
+[2026-10-30 22:54:28] INICIO abl_capmin10
+[2026-10-30 23:17:58] FIN    abl_capmin10 (23 min)
+[2026-10-30 23:17:58] INICIO abl_cruce_2p
+[2026-10-30 23:37:41] FIN    abl_cruce_2p (19 min)
+[2026-10-30 23:37:41] INICIO abl_f2_std
+[2026-10-31 00:01:46] FIN    abl_f2_std (24 min)
+[2026-10-31 00:01:46] Campaña terminada sin fallos. Resultados en resultados/tesis/

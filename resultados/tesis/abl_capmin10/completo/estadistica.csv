@@ -1,0 +1,4 @@
+metrica,test,A,B,p_valor,A12(A mejor que B),efecto,p_holm,significativo_0.05
+HV,Mann-Whitney,nsga3,greedy,,1.0,grande,,False
+IGD+,Mann-Whitney,nsga3,greedy,,,,,False
+GD+,Mann-Whitney,nsga3,greedy,,,,,False

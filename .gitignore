@@ -1,0 +1,19 @@
+# --- Datos personales y credenciales: NUNCA publicar ---
+.env
+datos_asu/
+datos/
+*.npz
+*.csv.gz
+resultados/**/conjuntos_pareto/
+resultados/**/pareto_bd/
+
+# --- Entorno y archivos generados ---
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+# --- Material de trabajo local ---
+Claude outputs/

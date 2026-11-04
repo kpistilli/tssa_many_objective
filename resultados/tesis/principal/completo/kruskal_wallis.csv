@@ -1,0 +1,4 @@
+metrica,test,estadistico,p_valor,k_algoritmos
+HV,Kruskal-Wallis,162.77979253112028,8.33770022974645e-32,8
+IGD+,Kruskal-Wallis,182.37051175656995,6.150637781233099e-36,8
+GD+,Kruskal-Wallis,202.10056708160425,4.120569393143962e-40,8

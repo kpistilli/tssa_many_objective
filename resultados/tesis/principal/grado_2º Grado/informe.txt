@@ -1,0 +1,230 @@
+Escenario: grado_2º Grado
+Instancia: 2486 estudiantes, 101 docentes, 107 clases
+Objetivos: f1_distancia, f2_balance, f3_colocalizacion, f4_distancia_max
+Corridas: 30 x 9 | pop=100 gen=500 | tiempo total 58.7 min
+
+== Referencias ==
+                               0          1
+referencia                greedy        MEC
+f1_distancia            1.943222   8.332064
+f2_balance            227.207092  42.216438
+f3_colocalizacion       0.079208   0.059406
+f4_distancia_max        8.087493  21.675228
+g1_capacidad                 0.0        0.0
+g2_clase_sin_docente         0.0        0.0
+g3_carga_docente             0.0        0.0
+g4_conflicto_turno           0.0        0.0
+g5_grado                     0.0        0.0
+dist_prom_est           0.683811   3.108959
+dist_prom_doc           1.259411   5.223106
+dist_max_est            2.676587   11.20566
+dist_max_doc            5.410906  10.469568
+clases_activas                94        107
+docentes_usados               75        101
+mapeo_exacto                 NaN     2486.0
+
+== Resumen de indicadores ==
+               HV                                    IGD+                                     GD+                                 spacing                                      n_nd                            n_nd_ult_poblacion                          tasa_factibles_pob_final                           tiempo_s                                   
+             mean     std  median     min     max    mean     std  median     min     max    mean     std  median     min     max    mean     std  median     min     max      mean      std median  min   max               mean     std median  min  max                     mean     std median   min  max     mean     std   median      min      max
+algoritmo                                                                                                                                                                                                                                                                                                                                                
+ctaea      0.7581  0.0170  0.7576  0.7069  0.7881  0.0861  0.0116  0.0871  0.0533  0.1074  0.0522  0.0101  0.0533  0.0247  0.0749  0.0446  0.0051  0.0431  0.0376  0.0573  449.2667  53.4518  457.0  330   573           100.0000  0.0000  100.0  100  100                   1.0000  0.0000    1.0  1.00  1.0  51.1724  0.5485  51.2719  49.7201  52.0467
+ctaea@3    0.6868  0.0185  0.6880  0.6524  0.7146  0.1217  0.0105  0.1193  0.1062  0.1481  0.0559  0.0094  0.0547  0.0382  0.0767  0.0559  0.0056  0.0555  0.0479  0.0746  168.4000  18.3484  167.0  134   230            58.3000  4.5040   59.0   45   66                   1.0000  0.0000    1.0  1.00  1.0  50.5956  1.6370  50.8313  47.6134  53.4938
+greedy     0.0561     NaN  0.0561  0.0561  0.0561  0.6494     NaN  0.6494  0.6494  0.6494  0.0001     NaN  0.0001  0.0001  0.0001  0.0000     NaN  0.0000  0.0000  0.0000    1.0000      NaN    1.0    1     1             1.0000     NaN    1.0    1    1                   1.0000     NaN    1.0  1.00  1.0   0.0036     NaN   0.0036   0.0036   0.0036
+nsga2      0.7078  0.0258  0.7113  0.6573  0.7444  0.1057  0.0137  0.1028  0.0872  0.1439  0.0964  0.0133  0.0946  0.0758  0.1267  0.0347  0.0031  0.0338  0.0300  0.0408  841.4333  73.7665  838.5  697  1028           100.0000  0.0000  100.0  100  100                   1.0000  0.0000    1.0  1.00  1.0  50.8984  4.0543  51.3600  43.2107  57.5423
+nsga2@3    0.7747  0.0232  0.7793  0.7215  0.8096  0.0636  0.0111  0.0598  0.0452  0.0865  0.0396  0.0117  0.0402  0.0215  0.0653  0.0362  0.0023  0.0364  0.0316  0.0408  346.2333  37.1118  344.0  286   422           100.0000  0.0000  100.0  100  100                   1.0000  0.0000    1.0  1.00  1.0  47.9583  2.6320  49.0435  43.0414  52.3314
+nsga3      0.7126  0.0181  0.7095  0.6779  0.7419  0.0924  0.0108  0.0908  0.0746  0.1178  0.0754  0.0127  0.0731  0.0534  0.1027  0.0322  0.0036  0.0316  0.0272  0.0400  826.0000  90.9437  803.5  656  1005           100.0000  0.0000  100.0  100  100                   1.0000  0.0000    1.0  1.00  1.0  46.0232  0.8733  46.1083  44.5153  47.4605
+rvea       0.4649  0.0312  0.4688  0.3589  0.5148  0.2409  0.0246  0.2389  0.2061  0.3247  0.1554  0.0248  0.1585  0.1110  0.2116  0.0875  0.0159  0.0882  0.0434  0.1301  248.7000  35.6875  250.5  109   297            23.4333  3.0364   23.5   17   29                   0.9747  0.1388    1.0  0.24  1.0  40.3266  1.2121  40.0620  38.6245  44.4929
+spea2      0.7364  0.0178  0.7339  0.7077  0.7774  0.0879  0.0108  0.0893  0.0630  0.1048  0.0853  0.0113  0.0863  0.0558  0.1048  0.0389  0.0026  0.0390  0.0338  0.0455  664.5333  62.9662  666.5  509   756           100.0000  0.0000  100.0  100  100                   1.0000  0.0000    1.0  1.00  1.0  51.6078  2.9772  51.5085  42.3557  58.7521
+unsga3     0.7105  0.0176  0.7120  0.6811  0.7590  0.0936  0.0096  0.0919  0.0731  0.1155  0.0771  0.0115  0.0755  0.0570  0.1043  0.0330  0.0034  0.0332  0.0274  0.0404  865.6000  89.5547  879.5  650  1000           100.0000  0.0000  100.0  100  100                   1.0000  0.0000    1.0  1.00  1.0  45.3233  0.9612  45.0446  44.3779  48.6673
+
+== Kruskal–Wallis (global) ==
+  metrica            test  estadistico  p_valor  k_algoritmos
+0      HV  Kruskal-Wallis     187.8126      0.0             8
+1    IGD+  Kruskal-Wallis     183.1817      0.0             8
+2     GD+  Kruskal-Wallis     198.7031      0.0             8
+
+== Mann–Whitney U por pares (p corregido: holm) y A12 ==
+    metrica          test        A        B  p_valor  A12(A mejor que B)        efecto  p_holm  significativo_0.05
+0        HV  Mann-Whitney  nsga2@3    nsga2   0.0000              0.9722        grande  0.0000                True
+1        HV  Mann-Whitney  nsga2@3    nsga3   0.0000              0.9789        grande  0.0000                True
+2        HV  Mann-Whitney  nsga2@3   unsga3   0.0000              0.9822        grande  0.0000                True
+3        HV  Mann-Whitney  nsga2@3  ctaea@3   0.0000              1.0000        grande  0.0000                True
+4        HV  Mann-Whitney  nsga2@3    ctaea   0.0044              0.7144        grande  0.0177                True
+5        HV  Mann-Whitney  nsga2@3     rvea   0.0000              1.0000        grande  0.0000                True
+6        HV  Mann-Whitney  nsga2@3    spea2   0.0000              0.8956        grande  0.0000                True
+7        HV  Mann-Whitney  nsga2@3   greedy      NaN              1.0000        grande     NaN               False
+8        HV  Mann-Whitney    nsga2    nsga3   0.5592              0.4556  despreciable  1.0000               False
+9        HV  Mann-Whitney    nsga2   unsga3   0.9587              0.4956  despreciable  1.0000               False
+10       HV  Mann-Whitney    nsga2  ctaea@3   0.0020              0.7333        grande  0.0098                True
+11       HV  Mann-Whitney    nsga2    ctaea   0.0000              0.0322        grande  0.0000                True
+12       HV  Mann-Whitney    nsga2     rvea   0.0000              1.0000        grande  0.0000                True
+13       HV  Mann-Whitney    nsga2    spea2   0.0001              0.1978        grande  0.0004                True
+14       HV  Mann-Whitney    nsga2   greedy      NaN              1.0000        grande     NaN               False
+15       HV  Mann-Whitney    nsga3   unsga3   0.6520              0.5344  despreciable  1.0000               False
+16       HV  Mann-Whitney    nsga3  ctaea@3   0.0000              0.8300        grande  0.0001                True
+17       HV  Mann-Whitney    nsga3    ctaea   0.0000              0.0289        grande  0.0000                True
+18       HV  Mann-Whitney    nsga3     rvea   0.0000              1.0000        grande  0.0000                True
+19       HV  Mann-Whitney    nsga3    spea2   0.0000              0.1822        grande  0.0002                True
+20       HV  Mann-Whitney    nsga3   greedy      NaN              1.0000        grande     NaN               False
+21       HV  Mann-Whitney   unsga3  ctaea@3   0.0000              0.8211        grande  0.0002                True
+22       HV  Mann-Whitney   unsga3    ctaea   0.0000              0.0411        grande  0.0000                True
+23       HV  Mann-Whitney   unsga3     rvea   0.0000              1.0000        grande  0.0000                True
+24       HV  Mann-Whitney   unsga3    spea2   0.0000              0.1389        grande  0.0000                True
+25       HV  Mann-Whitney   unsga3   greedy      NaN              1.0000        grande     NaN               False
+26       HV  Mann-Whitney  ctaea@3    ctaea   0.0000              0.0056        grande  0.0000                True
+27       HV  Mann-Whitney  ctaea@3     rvea   0.0000              1.0000        grande  0.0000                True
+28       HV  Mann-Whitney  ctaea@3    spea2   0.0000              0.0089        grande  0.0000                True
+29       HV  Mann-Whitney  ctaea@3   greedy      NaN              1.0000        grande     NaN               False
+30       HV  Mann-Whitney    ctaea     rvea   0.0000              1.0000        grande  0.0000                True
+31       HV  Mann-Whitney    ctaea    spea2   0.0000              0.8200        grande  0.0002                True
+32       HV  Mann-Whitney    ctaea   greedy      NaN              1.0000        grande     NaN               False
+33       HV  Mann-Whitney     rvea    spea2   0.0000              0.0000        grande  0.0000                True
+34       HV  Mann-Whitney     rvea   greedy      NaN              1.0000        grande     NaN               False
+35       HV  Mann-Whitney    spea2   greedy      NaN              1.0000        grande     NaN               False
+36     IGD+  Mann-Whitney  nsga2@3    nsga2   0.0000              1.0000        grande  0.0000                True
+37     IGD+  Mann-Whitney  nsga2@3    nsga3   0.0000              0.9678        grande  0.0000                True
+38     IGD+  Mann-Whitney  nsga2@3   unsga3   0.0000              0.9811        grande  0.0000                True
+39     IGD+  Mann-Whitney  nsga2@3  ctaea@3   0.0000              1.0000        grande  0.0000                True
+40     IGD+  Mann-Whitney  nsga2@3    ctaea   0.0000              0.9078        grande  0.0000                True
+41     IGD+  Mann-Whitney  nsga2@3     rvea   0.0000              1.0000        grande  0.0000                True
+42     IGD+  Mann-Whitney  nsga2@3    spea2   0.0000              0.9378        grande  0.0000                True
+43     IGD+  Mann-Whitney  nsga2@3   greedy      NaN              1.0000        grande     NaN               False
+44     IGD+  Mann-Whitney    nsga2    nsga3   0.0002              0.2233        grande  0.0019                True
+45     IGD+  Mann-Whitney    nsga2   unsga3   0.0005              0.2389        grande  0.0037                True
+46     IGD+  Mann-Whitney    nsga2  ctaea@3   0.0000              0.8311        grande  0.0001                True
+47     IGD+  Mann-Whitney    nsga2    ctaea   0.0000              0.1300        grande  0.0000                True
+48     IGD+  Mann-Whitney    nsga2     rvea   0.0000              1.0000        grande  0.0000                True
+49     IGD+  Mann-Whitney    nsga2    spea2   0.0000              0.1433        grande  0.0000                True
+50     IGD+  Mann-Whitney    nsga2   greedy      NaN              1.0000        grande     NaN               False
+51     IGD+  Mann-Whitney    nsga3   unsga3   0.5793              0.5422  despreciable  1.0000               False
+52     IGD+  Mann-Whitney    nsga3  ctaea@3   0.0000              0.9767        grande  0.0000                True
+53     IGD+  Mann-Whitney    nsga3    ctaea   0.0798              0.3678       pequeña  0.3191               False
+54     IGD+  Mann-Whitney    nsga3     rvea   0.0000              1.0000        grande  0.0000                True
+55     IGD+  Mann-Whitney    nsga3    spea2   0.2340              0.4100       pequeña  0.7020               False
+56     IGD+  Mann-Whitney    nsga3   greedy      NaN              1.0000        grande     NaN               False
+57     IGD+  Mann-Whitney   unsga3  ctaea@3   0.0000              0.9833        grande  0.0000                True
+58     IGD+  Mann-Whitney   unsga3    ctaea   0.0184              0.3222       mediana  0.1102               False
+59     IGD+  Mann-Whitney   unsga3     rvea   0.0000              1.0000        grande  0.0000                True
+60     IGD+  Mann-Whitney   unsga3    spea2   0.0575              0.3567       mediana  0.2873               False
+61     IGD+  Mann-Whitney   unsga3   greedy      NaN              1.0000        grande     NaN               False
+62     IGD+  Mann-Whitney  ctaea@3    ctaea   0.0000              0.0011        grande  0.0000                True
+63     IGD+  Mann-Whitney  ctaea@3     rvea   0.0000              1.0000        grande  0.0000                True
+64     IGD+  Mann-Whitney  ctaea@3    spea2   0.0000              0.0000        grande  0.0000                True
+65     IGD+  Mann-Whitney  ctaea@3   greedy      NaN              1.0000        grande     NaN               False
+66     IGD+  Mann-Whitney    ctaea     rvea   0.0000              1.0000        grande  0.0000                True
+67     IGD+  Mann-Whitney    ctaea    spea2   0.5997              0.5400  despreciable  1.0000               False
+68     IGD+  Mann-Whitney    ctaea   greedy      NaN              1.0000        grande     NaN               False
+69     IGD+  Mann-Whitney     rvea    spea2   0.0000              0.0000        grande  0.0000                True
+70     IGD+  Mann-Whitney     rvea   greedy      NaN              1.0000        grande     NaN               False
+71     IGD+  Mann-Whitney    spea2   greedy      NaN              1.0000        grande     NaN               False
+72      GD+  Mann-Whitney  nsga2@3    nsga2   0.0000              1.0000        grande  0.0000                True
+73      GD+  Mann-Whitney  nsga2@3    nsga3   0.0000              0.9867        grande  0.0000                True
+74      GD+  Mann-Whitney  nsga2@3   unsga3   0.0000              0.9911        grande  0.0000                True
+75      GD+  Mann-Whitney  nsga2@3  ctaea@3   0.0000              0.8556        grande  0.0000                True
+76      GD+  Mann-Whitney  nsga2@3    ctaea   0.0001              0.7922        grande  0.0006                True
+77      GD+  Mann-Whitney  nsga2@3     rvea   0.0000              1.0000        grande  0.0000                True
+78      GD+  Mann-Whitney  nsga2@3    spea2   0.0000              0.9956        grande  0.0000                True
+79      GD+  Mann-Whitney  nsga2@3   greedy      NaN              0.0000        grande     NaN               False
+80      GD+  Mann-Whitney    nsga2    nsga3   0.0000              0.1200        grande  0.0000                True
+81      GD+  Mann-Whitney    nsga2   unsga3   0.0000              0.1422        grande  0.0000                True
+82      GD+  Mann-Whitney    nsga2  ctaea@3   0.0000              0.0011        grande  0.0000                True
+83      GD+  Mann-Whitney    nsga2    ctaea   0.0000              0.0000        grande  0.0000                True
+84      GD+  Mann-Whitney    nsga2     rvea   0.0000              0.9900        grande  0.0000                True
+85      GD+  Mann-Whitney    nsga2    spea2   0.0046              0.2867        grande  0.0185                True
+86      GD+  Mann-Whitney    nsga2   greedy      NaN              0.0000        grande     NaN               False
+87      GD+  Mann-Whitney    nsga3   unsga3   0.5106              0.5500  despreciable  0.5106               False
+88      GD+  Mann-Whitney    nsga3  ctaea@3   0.0000              0.1033        grande  0.0000                True
+89      GD+  Mann-Whitney    nsga3    ctaea   0.0000              0.0600        grande  0.0000                True
+90      GD+  Mann-Whitney    nsga3     rvea   0.0000              1.0000        grande  0.0000                True
+91      GD+  Mann-Whitney    nsga3    spea2   0.0030              0.7233        grande  0.0152                True
+92      GD+  Mann-Whitney    nsga3   greedy      NaN              0.0000        grande     NaN               False
+93      GD+  Mann-Whitney   unsga3  ctaea@3   0.0000              0.0733        grande  0.0000                True
+94      GD+  Mann-Whitney   unsga3    ctaea   0.0000              0.0378        grande  0.0000                True
+95      GD+  Mann-Whitney   unsga3     rvea   0.0000              1.0000        grande  0.0000                True
+96      GD+  Mann-Whitney   unsga3    spea2   0.0080              0.7000       mediana  0.0239                True
+97      GD+  Mann-Whitney   unsga3   greedy      NaN              0.0000        grande     NaN               False
+98      GD+  Mann-Whitney  ctaea@3    ctaea   0.2170              0.4067       pequeña  0.4340               False
+99      GD+  Mann-Whitney  ctaea@3     rvea   0.0000              1.0000        grande  0.0000                True
+100     GD+  Mann-Whitney  ctaea@3    spea2   0.0000              0.9744        grande  0.0000                True
+101     GD+  Mann-Whitney  ctaea@3   greedy      NaN              0.0000        grande     NaN               False
+102     GD+  Mann-Whitney    ctaea     rvea   0.0000              1.0000        grande  0.0000                True
+103     GD+  Mann-Whitney    ctaea    spea2   0.0000              0.9822        grande  0.0000                True
+104     GD+  Mann-Whitney    ctaea   greedy      NaN              0.0000        grande     NaN               False
+105     GD+  Mann-Whitney     rvea    spea2   0.0000              0.0000        grande  0.0000                True
+106     GD+  Mann-Whitney     rvea   greedy      NaN              0.0000        grande     NaN               False
+107     GD+  Mann-Whitney    spea2   greedy      NaN              0.0000        grande     NaN               False
+
+== Mejora vs referencias (unión de corridas) ==
+  algoritmo referencia           objetivo sentido                                             descripcion  valor_referencia  mejor_del_frente  mejora_%_mejor  compromiso  mejora_%_compromiso  dominan_a_ref  dominadas_por_ref  no_comparables
+0   nsga2@3     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9214          1.1215      3.0989             -59.4698              1                  0            1110
+1   nsga2@3     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071            9.7865         95.6927     87.3566              61.5520              1                  0            1110
+2   nsga2@3     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.2178        175.0000      0.1980             150.0000              1                  0            1110
+3   nsga2@3     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000     17.1805            -112.4331              1                  0            1110
+0   nsga2@3        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9214         76.9393      3.0989              62.8081            175                  0             936
+1   nsga2@3        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164            9.7865         76.8182     87.3566            -106.9256            175                  0             936
+2   nsga2@3        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.2178        266.6667      0.1980             233.3333            175                  0             936
+3   nsga2@3        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879     17.1805              20.7366            175                  0             936
+0     nsga2     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9152          1.4397      3.6055             -85.5399              0                  0            2146
+1     nsga2     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071           10.6463         95.3143     93.1136              59.0182              0                  0            2146
+2     nsga2     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.2178        175.0000      0.1683             112.5000              0                  0            2146
+3     nsga2     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000     17.7250            -119.1662              0                  0            2146
+0     nsga2        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9152         77.0136      3.6055              56.7280            116                  0            2030
+1     nsga2        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164           10.6463         74.7815     93.1136            -120.5625            116                  0            2030
+2     nsga2        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.2178        266.6667      0.1683             183.3333            116                  0            2030
+3     nsga2        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879     17.7250              18.2244            116                  0            2030
+0     nsga3     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9276          0.8014      3.5391             -82.1231              0                  0            1954
+1     nsga3     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071           24.3286         89.2923    100.4594              55.7851              0                  0            1954
+2     nsga3     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.2178        175.0000      0.1683             112.5000              0                  0            1954
+3     nsga3     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000     16.9787            -109.9373              0                  0            1954
+0     nsga3        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9276         76.8647      3.5391              57.5249             58                  0            1896
+1     nsga3        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164           24.3286         42.3718    100.4594            -137.9628             58                  0            1896
+2     nsga3        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.2178        266.6667      0.1683             183.3333             58                  0            1896
+3     nsga3        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879     16.9787              21.6679             58                  0            1896
+0    unsga3     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9400          0.1665      3.3410             -71.9308              0                  0            1632
+1    unsga3     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071           26.2351         88.4532    115.7678              49.0474              0                  0            1632
+2    unsga3     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.2178        175.0000      0.1287              62.5000              0                  0            1632
+3    unsga3     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            7.6299          5.6585     16.6283            -105.6053              0                  0            1632
+0    unsga3        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9400         76.7166      3.3410              59.9019             63                  0            1569
+1    unsga3        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164           26.2351         37.8557    115.7678            -174.2246             63                  0            1569
+2    unsga3        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.2178        266.6667      0.1287             116.6667             63                  0            1569
+3    unsga3        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            7.6299         64.7992     16.6283              23.2843             63                  0            1569
+0   ctaea@3     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9432          0.0000      3.6209             -86.3357              0                  0             652
+1   ctaea@3     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071            1.8987         99.1643     86.8893              61.7576              0                  0             652
+2   ctaea@3     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.2178        175.0000      0.1881             137.5000              0                  0             652
+3   ctaea@3     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000     18.3328            -126.6807              0                  0             652
+0   ctaea@3        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9432         76.6778      3.6209              56.5424            219                  0             433
+1   ctaea@3        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164            1.8987         95.5025     86.8893            -105.8187            219                  0             433
+2   ctaea@3        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.2178        266.6667      0.1881             216.6667            219                  0             433
+3   ctaea@3        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879     18.3328              15.4206            219                  0             433
+0     ctaea     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9251          0.9304      3.2768             -68.6251              0                  0            1066
+1     ctaea     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071            5.3566         97.6424     77.6370              65.8299              0                  0            1066
+2     ctaea     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.2178        175.0000      0.1386              75.0000              0                  0            1066
+3     ctaea     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000     17.2653            -113.4814              0                  0            1066
+0     ctaea        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9251         76.8948      3.2768              60.6729            322                  0             744
+1     ctaea        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164            5.3566         87.3115     77.6370             -83.9023            322                  0             744
+2     ctaea        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.2178        266.6667      0.1386             133.3333            322                  0             744
+3     ctaea        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879     17.2653              20.3455            322                  0             744
+0      rvea     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9432          0.0000      3.6390             -87.2679              0                  0            1009
+1      rvea     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071            4.2538         98.1278     83.0576              63.4441              0                  0            1009
+2      rvea     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.1782        125.0000      0.1287              62.5000              0                  0            1009
+3      rvea     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000     17.9021            -121.3552              0                  0            1009
+0      rvea        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9432         76.6778      3.6390              56.3250            334                  0             675
+1      rvea        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164            4.2538         89.9238     83.0576             -96.7422            334                  0             675
+2      rvea        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.1782        200.0000      0.1287             116.6667            334                  0             675
+3      rvea        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879     17.9021              17.4076            334                  0             675
+0     spea2     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9331          0.5224      3.2776             -68.6675              0                  0            1588
+1     spea2     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071           18.0482         92.0565    104.1977              54.1397              0                  0            1588
+2     spea2     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.2178        175.0000      0.1683             112.5000              0                  0            1588
+3     spea2     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000     16.8978            -108.9379              0                  0            1588
+0     spea2        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9331         76.7996      3.2776              60.6630             93                  0            1495
+1     spea2        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164           18.0482         57.2484    104.1977            -146.8179             93                  0            1495
+2     spea2        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.2178        266.6667      0.1683             183.3333             93                  0            1495
+3     spea2        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879     16.8978              22.0408             93                  0            1495
+0    greedy     greedy       f1_distancia     min                       Distancia promedio est.+doc. (km)            1.9432            1.9432          0.0000      1.9432               0.0000              0                  0               1
+1    greedy     greedy         f2_balance     min                        Balance alumnos/clase (varianza)          227.2071          227.2071          0.0000    227.2071               0.0000              0                  0               1
+2    greedy     greedy  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0792            0.0792          0.0000      0.0792               0.0000              0                  0               1
+3    greedy     greedy   f4_distancia_max     min                         Distancia máxima est.+doc. (km)            8.0875            8.0875          0.0000      8.0875               0.0000              0                  0               1
+0    greedy        MEC       f1_distancia     min                       Distancia promedio est.+doc. (km)            8.3321            1.9432         76.6778      1.9432              76.6778              0                  0               1
+1    greedy        MEC         f2_balance     min                        Balance alumnos/clase (varianza)           42.2164          227.2071       -438.1958    227.2071            -438.1958              0                  0               1
+2    greedy        MEC  f3_colocalizacion     max  Docentes con 2 clases en mismo establecimiento (prop.)            0.0594            0.0792         33.3333      0.0792              33.3333              0                  0               1
+3    greedy        MEC   f4_distancia_max     min                         Distancia máxima est.+doc. (km)           21.6752            8.0875         62.6879      8.0875              62.6879              0                  0               1

@@ -1,0 +1,4 @@
+[2026-10-31 05:05:29] Campaña iniciada. Fases: 6  (RUNS=30 POP=100 GEN=500 MAX_ARCHIVO=2000)
+[2026-10-31 05:05:29] Fase 6: guardando el Conjunto Pareto final en PostgreSQL
+[2026-10-31 05:07:41] FIN    BD actualizada (opt_run, pareto_solucion, asignacion_pareto, asignacion_mec_opt)
+[2026-10-31 05:07:41] Campaña terminada sin fallos. Resultados en resultados/tesis/
