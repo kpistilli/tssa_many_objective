@@ -16,6 +16,14 @@
 #      (la formulación principal de la tesis es f1-f4; f5 queda como trabajo futuro)
 #   5  Ablaciones (una a la vez, contra NSGA-III)
 #   6  Guardar en PostgreSQL el Conjunto Pareto final (para el viewer)
+#   7  Cotas exactas de la componente de alumnos (LP de transporte y cuello de
+#      botella por flujo; sin MOEA, segundos). Sólo necesita la fase 1; si existe
+#      la fase 3, calcula además la brecha de cada algoritmo al óptimo.
+#      No forma parte de la ejecución por defecto: bash campania_tesis.sh 7
+#   8  Revisión R1-1: escenario completo con cruce de DOS PUNTOS para C-TAEA,
+#      NSGA-III, NSGA-II y SPEA2 (+ greedy), 30 corridas con las mismas semillas
+#      que la fase 3. Responde si el orden de los algoritmos se conserva con el
+#      operador que ganó la ablación. Opcional: bash campania_tesis.sh 8
 #
 # Es reanudable: si un experimento ya tiene informe.txt, se salta.
 # Si un experimento falla, se registra y la campaña continúa.
@@ -119,6 +127,18 @@ for f in $FASES; do case $f in
          --exportar-pareto "$SALIDA/pareto_bd" >>"$SALIDA/logs/bd_final.log" 2>&1 \
        && log "FIN    BD actualizada (opt_run, pareto_solucion, asignacion_pareto, asignacion_mec_opt)" \
        || { log "FALLO  guardado en BD (ver $SALIDA/logs/bd_final.log)"; FALLOS+=("bd_final"); } ;;
+
+  7) log "Fase 7: cotas exactas (componente de alumnos de f1 y f4)"
+     if python cotas_exactas.py --csv-dir "$CSV_DIR" --exp "$SALIDA/principal/completo" \
+          --salida "$SALIDA/cotas_exactas" >>"$SALIDA/logs/cotas_exactas.log" 2>&1; then
+       log "FIN    cotas exactas ($SALIDA/cotas_exactas/)"
+     else
+       log "FALLO  cotas exactas (ver $SALIDA/logs/cotas_exactas.log)"; FALLOS+=("cotas_exactas")
+     fi ;;
+
+  8) log "Fase 8 (revisión R1-1): escenario completo con cruce de dos puntos"
+     exp principal_cruce2p $BASE --escenario completo --cruce 2p \
+         --algoritmos ctaea nsga3 nsga2 spea2 greedy --guardar-pareto frente ;;
 
   *) log "Fase desconocida: $f" ;;
 esac; done

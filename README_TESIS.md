@@ -95,7 +95,8 @@ Las restricciones son:
 | `experiments.py` | Protocolo experimental completo (ver secciones 3 a 5) |
 | `integrated_app.py` | Una corrida: imprime el Conjunto Pareto, las soluciones elegidas por cada método y la comparación con el MEC. Opciones `--exportar-pareto`, `--metodo-decision`, `--guardar-pareto` y `--max-archivo` |
 | `tests/test_tssa.py` | 26 pruebas: ejemplo didáctico, regresión contra la v1.3, reparación, greedy, los 6 algoritmos, archivo Pareto, decisión, f4_modo, f6, Holm/Bonferroni, exportación, franjas Mañana-Tarde (R4), mapeo de secciones no consecutivas, exclusión del greedy infactible, reproducibilidad por semilla, semillas de estabilidad (f6) y decisión `domina_mec` |
-| `campania_tesis.sh` | Campaña experimental completa y reanudable (fases 0 a 6; ver sección 4) |
+| `campania_tesis.sh` | Campaña experimental completa y reanudable (fases 0 a 6, y 7 opcional; ver sección 4) |
+| `cotas_exactas.py` | Cotas exactas de la componente de alumnos y brecha de los frentes (fase 7; sección 12) |
 
 `database.py` y `integrated_viewer_optimizado.py` de tu proyecto no se modifican. El viewer sigue funcionando porque se sigue escribiendo `asignacion_mec_opt`, ahora con la solución elegida y la sección derivada.
 
@@ -181,6 +182,8 @@ Campaña completa de la tesis (recomendado):
 ```bash
 bash campania_tesis.sh            # fases 0 a 6
 bash campania_tesis.sh 5 6        # sólo las fases indicadas
+bash campania_tesis.sh 7          # cotas exactas (opcional, segundos)
+bash campania_tesis.sh 8          # cruce de dos puntos, revisión R1-1 (opcional, ~1,5-2 h)
 ```
 
 | Fase | Contenido |
@@ -192,6 +195,8 @@ bash campania_tesis.sh 5 6        # sólo las fases indicadas
 | 4 | Análisis complementario: 5 objetivos con estabilidad (f1–f4 + f6). Mide cuánto mejoran los demás objetivos según la proporción de alumnos reasignados |
 | 5 | 8 ablaciones sobre NSGA-III (SBX, f4 = max, sin reparación, sin semilla greedy, cap-min 25 y 10, cruce 2p, f2 = std) |
 | 6 | Corrida con C-TAEA que guarda el Conjunto Pareto en PostgreSQL para el viewer. La solución que va a `asignacion_mec_opt` se elige con `domina_mec`: la de compromiso entre las que mejoran al MEC en todos los objetivos (respaldar antes `asignacion_mec_opt`) |
+| 7 | Cotas exactas de la componente de alumnos (`cotas_exactas.py`, sin MOEA): óptimo de la distancia media (LP de transporte) y de la peor distancia (cuello de botella por flujo), con certificado de que existe una asignación de docentes factible. Sólo necesita la fase 1; con la fase 3 calcula además la brecha de cada algoritmo. Opcional: no se ejecuta por defecto (ver sección 12) |
+| 8 | Revisión R1-1: escenario completo con cruce de dos puntos para C-TAEA, NSGA-III, NSGA-II y SPEA2 (+ greedy), 30 corridas con las mismas semillas que la fase 3 (120 corridas). Opcional; salida en `resultados/tesis/principal_cruce2p/` |
 
 Parámetros: `RUNS=30`, `POP=100`, `GEN=500`, `MAX_ARCHIVO=2000`, `PROCESOS=4`. Es reanudable: salta los experimentos que ya tienen `informe.txt`. Si un experimento falla, se registra y la campaña continúa. Los logs quedan en `resultados/tesis/logs/`.
 
@@ -336,4 +341,38 @@ Resultados completos en el documento del proyecto `resultados_fase5_ablaciones.m
 | cap-min 25 | 0,053 | El frente casi colapsa |
 
 **Decisión (31/10/2026): el cruce de 2 puntos se reporta como hallazgo y trabajo futuro; no se repiten las fases.** Todas las fases usaron cruce uniforme para todos los algoritmos, así que la comparación entre algoritmos es justa, pero la calidad absoluta de los frentes podría mejorar con cruce de 2 puntos. Hipótesis: el cruce de 2 puntos preserva bloques contiguos del vector, mientras que el uniforme rompe la relación entre la asignación de los alumnos y la de los docentes de sus clases. Trabajo futuro: (1) verificar si el orden de los algoritmos (C-TAEA primero) se mantiene con cruce de 2 puntos; (2) estudiar operadores que respeten explícitamente esa relación (por ejemplo, cruce por establecimiento).
+
+## 12. Cotas exactas de la componente de alumnos (fase 7, noviembre de 2026)
+
+Respuesta al revisor R1-3 (¿qué tan lejos del óptimo están los frentes?). No es una corrida evolutiva ni obliga a repetir fases: es un cálculo determinista sobre `datos_asu/` que tarda unos segundos (`bash campania_tesis.sh 7`, salida en `resultados/tesis/cotas_exactas/`). El mismo script está en el artículo como `codigo/cotas_exactas_asu.py`.
+
+- **Media de alumnos (componente de f1).** Problema de transporte por grado: alumno → establecimiento con la capacidad agregada de sus clases del grado. Es totalmente unimodular, así que el LP (HiGHS) da la solución entera óptima.
+- **Peor distancia de alumnos (componente de f4).** Cuello de botella: búsqueda binaria sobre las distancias con factibilidad por flujo máximo. También se calcula la media mínima sujeta a ese peor viaje.
+- **Certificado.** Para cada óptimo se arma la asignación a clases y un MILP de factibilidad comprueba que existe una asignación de docentes que cumple R3–R5. Como existe, las cotas se **alcanzan**: son los óptimos exactos de esas componentes en el problema completo. Los docentes y R7 no intervienen, así que valen con y sin R7.
+
+| Componente de alumnos | Óptimo exacto | Greedy | Mejor de los MOEAs (fase 3) | MEC |
+|---|---|---|---|---|
+| Distancia media (km) | 0,607 | 0,711 (+17,1 %) | 0,664, RVEA (+9,4 %) | 3,112 |
+| Peor distancia (km) | 2,418 | 3,262 (+34,9 %) | 3,262, todos (+34,9 %) | 11,206 |
+
+- La capacidad sube la media del ideal sin capacidad (0,556 km, clase más cercana) al óptimo de 0,607 km, pero no limita el peor viaje: 2,418 km es la distancia del alumno más alejado a su clase más cercana.
+- Lograr el peor viaje mínimo casi no cuesta media: la media mínima con peor viaje ≤ 2,418 km es 0,607 km (+0,05 %). En esta instancia f1 y f4 no compiten en la componente de alumnos.
+- Ningún algoritmo mejora la peor distancia de alumnos del greedy en ninguna de las 240 corridas, y en la media sólo se acercan algunas corridas (mediana por algoritmo = greedy). Esto refuerza la observación de la sección 6, punto 8: el greedy no es el óptimo en distancia y la búsqueda no explora esa zona.
+- Trabajo futuro barato: sembrar los MOEAs con las soluciones del LP y del cuello de botella además del greedy.
+
+## 13. Cruce de dos puntos en el escenario completo (fase 8, noviembre de 2026)
+
+Respuesta al revisor R1-1. Las 120 corridas (C-TAEA, SPEA2, NSGA-II y NSGA-III, mismas semillas que la fase 3) se compararon con las de la fase 3 usando una normalización común (`articulo_tssa/codigo/cruce2p_asu.py`). Medianas:
+
+| Algoritmo | HV UX | HV 2P | IGD+ UX | IGD+ 2P | GD+ UX | GD+ 2P | Dominan al MEC UX | Dominan al MEC 2P |
+|---|---|---|---|---|---|---|---|---|
+| C-TAEA | 0,594 | 0,678 | 0,097 | 0,087 | 0,041 | 0,067 | 28/30 | 12/30 |
+| SPEA2 | 0,559 | 0,710 | 0,120 | 0,057 | 0,104 | 0,057 | 0/30 | 5/30 |
+| NSGA-II | 0,547 | 0,684 | 0,136 | 0,089 | 0,099 | 0,086 | 0/30 | 3/30 |
+| NSGA-III | 0,548 | 0,658 | 0,125 | 0,071 | 0,094 | 0,055 | 0/30 | 0/30 |
+
+- El cruce de dos puntos mejora el HV de todos los algoritmos, pero el orden cambia: SPEA2 pasa a ser el mejor en HV e IGD+.
+- C-TAEA sigue siendo el que más veces domina al MEC, pero ya no es el único. La diferencia con SPEA2 no es significativa (Fisher + Holm, p = 0,08).
+- Para el objetivo práctico de mejorar la asignación vigente, la mejor configuración sigue siendo C-TAEA con cruce uniforme.
+- Las conclusiones de la tesis sobre algoritmos quedan condicionadas al cruce uniforme. El 2×2, la estabilidad y las ablaciones no se repitieron con 2P.
 

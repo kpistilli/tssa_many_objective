@@ -1,0 +1,56 @@
+cotas.csv ya existe (borrarlo para recalcular)
+corridas procesadas: 241 (+0)
+   algoritmo  corridas  mejor_media_est  mediana_media_est  mejor_max_est  mediana_max_est  brecha_mejor_media_est  brecha_mediana_media_est  brecha_mejor_max_est  brecha_mediana_max_est
+0      ctaea        30         0.685885           0.710934       3.261681         3.261681               13.009364                 17.136567             34.886679               34.886679
+1  ctaea_at3        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+2     greedy         1         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+3      nsga2        30         0.708113           0.710934       3.261681         3.261681               16.671685                 17.136567             34.886679               34.886679
+4  nsga2_at3        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+5      nsga3        30         0.701789           0.710934       3.261681         3.261681               15.629787                 17.136567             34.886679               34.886679
+6       rvea        30         0.664016           0.710934       3.261681         3.261681                9.406188                 17.136567             34.886679               34.886679
+7      spea2        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+8     unsga3        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+9        MEC         0         3.112153           3.112153      11.205660        11.205660              412.771765                412.771765            363.409514              363.409514
+controles (deben ser >= 0): f1-media 1.1928, f4-max 4.7181
+certificado media: docentes factibles=True clases activas=242 media=0.6069 max=3.0722 (0.9s)
+certificado max: docentes factibles=True clases activas=230 media=1.5618 max=2.4181 (0.8s)
+certificado lex: docentes factibles=True clases activas=242 media=0.6072 max=2.4181 (0.9s)
+                                    0            1            2            3
+grado                        2º grado     3º grado     1º grado        Total
+alumnos                          2486         2677         2377         7540
+sitios                             69           68           68           69
+clases                            107          105          106          318
+capacidad                        4288         4200         4246        12734
+media_sin_cap                0.549999      0.56157     0.555356     0.555796
+max_sin_cap                   2.41809     2.364205     2.265904      2.41809
+suma_opt                   1473.60011  1721.094771  1381.538232  4576.233113
+media_opt                    0.592759     0.642919     0.581211     0.606927
+max_opt                       2.41809     2.364205     2.265904      2.41809
+t_lp_s                       0.356849     0.385768     0.315613      1.05823
+t_cuello_s                   0.035022     0.036371     0.028252     0.099645
+media_con_max_opt            0.592771     0.643682     0.581211     0.607202
+cert_media_factible              True         True         True         True
+cert_media_clases_activas         242          242          242          242
+cert_media_media             0.606927     0.606927     0.606927     0.606927
+cert_media_max               3.072176     3.072176     3.072176     3.072176
+cert_max_factible                True         True         True         True
+cert_max_clases_activas           230          230          230          230
+cert_max_media               1.561779     1.561779     1.561779     1.561779
+cert_max_max                  2.41809      2.41809      2.41809      2.41809
+cert_lex_factible                True         True         True         True
+cert_lex_clases_activas           242          242          242          242
+cert_lex_media               0.607202     0.607202     0.607202     0.607202
+cert_lex_max                  2.41809      2.41809      2.41809      2.41809
+corridas procesadas: 241 (+241)
+   algoritmo  corridas  mejor_media_est  mediana_media_est  mejor_max_est  mediana_max_est  brecha_mejor_media_est  brecha_mediana_media_est  brecha_mejor_max_est  brecha_mediana_max_est
+0      ctaea        30         0.685885           0.710934       3.261681         3.261681               13.009364                 17.136567             34.886679               34.886679
+1  ctaea_at3        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+2     greedy         1         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+3      nsga2        30         0.708113           0.710934       3.261681         3.261681               16.671685                 17.136567             34.886679               34.886679
+4  nsga2_at3        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+5      nsga3        30         0.701789           0.710934       3.261681         3.261681               15.629787                 17.136567             34.886679               34.886679
+6       rvea        30         0.664016           0.710934       3.261681         3.261681                9.406188                 17.136567             34.886679               34.886679
+7      spea2        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+8     unsga3        30         0.710934           0.710934       3.261681         3.261681               17.136567                 17.136567             34.886679               34.886679
+9        MEC         0         3.112153           3.112153      11.205660        11.205660              412.771765                412.771765            363.409514              363.409514
+controles (deben ser >= 0): f1-media 1.1928, f4-max 4.7181

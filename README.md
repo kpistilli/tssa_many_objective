@@ -53,7 +53,11 @@ bash campania_tesis.sh
 
 `campania_tesis.sh` runs the unit tests, the convergence pilot, the main
 experiment (eight configurations × four scenarios × 30 runs), the five-objective
-stability study and the eight ablations; it is resumable. Parameters and outputs
+stability study and the eight ablations; it is resumable. The optional phase 7
+(`bash campania_tesis.sh 7`, `cotas_exactas.py`) computes in seconds the exact
+optima of the student components of f1 (transportation LP) and f4 (bottleneck
+assignment via max-flow), certifies that a feasible teacher assignment exists,
+and reports the gap of every algorithm's Pareto sets to those optima. Parameters and outputs
 are described in `README_TESIS.md` (sections 4 and 5).
 
 ## License
