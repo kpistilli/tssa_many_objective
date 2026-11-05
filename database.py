@@ -10,11 +10,9 @@
 #   Ing. Eliana Telesca (investigadora en formación).
 #
 # Extensión many-objective (NSGA-III, U-NSGA-III, C-TAEA, RVEA, SPEA2; 3 a 6 objetivos):
-#   Klaus Pistilli — Investigador en formación
-#   Universidad Nacional de Asunción — Facultad Politécnica (FP-UNA)
-#   Asunción, Paraguay — 2026
-#
-# Tesis de Maestría en TIC - TSSA many-objective
+#   "Many-Objective Assignment of Teachers and Students to Schools: An Experimental 
+#   Evaluation of Algorithms" (K. Pistilli, F. López-Pires, R. Benítez — 
+#   Facultad Politécnica, Universidad Nacional de Asunción)
 #
 # Descripción del módulo
 # ----------------------

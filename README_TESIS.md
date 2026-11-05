@@ -7,9 +7,10 @@
 > Dr. Fabio López (tutor investigador), Ing. Eliana Telesca (investigadora
 > en formación).
 >
-> Extensión many-objective (NSGA-III, C-TAEA, RVEA y otros, 3–6 objetivos):
-> **Klaus Pistilli** — Investigador en formación, Universidad Nacional de
-> Asunción — Facultad Politécnica (FP-UNA), Asunción, Paraguay — 2026.
+> Extensión many-objective (NSGA-III, U-NSGA-III, C-TAEA, RVEA, SPEA2; 3 a 6 objetivos):
+> "Many-Objective Assignment of Teachers and Students to Schools: An Experimental 
+> Evaluation of Algorithms" (K. Pistilli, F. López-Pires, R. Benítez — 
+> Facultad Politécnica, Universidad Nacional de Asunción)
 
 Esta carpeta extiende el código del preprint hacia una formulación de **muchos objetivos** resuelta con **C-TAEA** y otros algoritmos many-objective. Incorpora un protocolo experimental reproducible al estilo de *Optimizing Student Assignment to Educational Establishments: A Many-Objective Approach* (Casco et al., CACIC 2024).
 

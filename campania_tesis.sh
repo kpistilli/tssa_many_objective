@@ -1,6 +1,11 @@
 #!/bin/bash
 # =====================================================================
 # Campaña experimental completa para la tesis (TSSA many-objective)
+# 
+# Extensión many-objective (NSGA-III, U-NSGA-III, C-TAEA, RVEA, SPEA2; 3 a 6 objetivos):
+#   "Many-Objective Assignment of Teachers and Students to Schools: An Experimental 
+#   Evaluation of Algorithms" (K. Pistilli, F. López-Pires, R. Benítez — 
+#   Facultad Politécnica, Universidad Nacional de Asunción)
 #
 # Uso:   bash campania_tesis.sh            # todas las fases
 #        bash campania_tesis.sh 3 4        # sólo las fases indicadas

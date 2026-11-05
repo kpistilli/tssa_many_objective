@@ -1,8 +1,10 @@
 # ================================================================
 # cotas_exactas_asu.py  —  Cotas exactas de la componente de alumnos
-# (respuesta al revisor R1-3: "¿qué tan lejos del óptimo están los frentes?")
-#
-# Klaus Pistilli, Rodrigo Benítez, et al. — FP-UNA, 2026
+# 
+# Extensión many-objective (NSGA-III, U-NSGA-III, C-TAEA, RVEA, SPEA2; 3 a 6 objetivos):
+#   "Many-Objective Assignment of Teachers and Students to Schools: An Experimental 
+#   Evaluation of Algorithms" (K. Pistilli, F. López-Pires, R. Benítez — 
+#   Facultad Politécnica, Universidad Nacional de Asunción)
 #
 # No es una corrida evolutiva: es un cálculo determinista sobre los datos
 # congelados (datos_asu/, fase 1). No depende de las fases 2–6.
